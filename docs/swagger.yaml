@@ -69,6 +69,57 @@ paths:
       summary: Create a new message
       tags:
       - messages
+  /messages/getDiscussions/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: Return a user list who the user have discussed with
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/routes.User'
+            type: array
+      summary: Return a list of user who a user speaks to
+      tags:
+      - messages
+  /messages/getMessagesBetween/{userId1}/{userId2}:
+    get:
+      consumes:
+      - application/json
+      description: get messages between two user
+      parameters:
+      - description: User ID 1
+        in: path
+        name: userId1
+        required: true
+        type: integer
+      - description: User ID 2
+        in: path
+        name: userId2
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/routes.Message'
+            type: array
+      summary: get messages between two user
+      tags:
+      - messages
   /users:
     get:
       consumes:
@@ -100,8 +151,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/routes.User'
       summary: Create a new user
