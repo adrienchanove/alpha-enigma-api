@@ -33,9 +33,25 @@ func main() {
 	// Ajout de la route pour Swagger UI
 	router.GET("/doc/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	// / redirect to /doc/index.html
+	router.GET("/", func(c *gin.Context) {
+		c.Redirect(301, "/doc/index.html")
+	})
+	// 404
+	router.NoRoute(func(c *gin.Context) {
+		c.JSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Page not found"})
+	})
+
 	// Initialize the database
 	database.InitDB("./alpha-enigma.db")
 	db := database.DB
+
+	// public routes
+	routes.SetupAuthRoutes(router, db)
+	routes.SetupPublicUserRoutes(router, db)
+
+	// private routes
+	router.Use(routes.AuthMiddleware())
 
 	routes.SetupUserRoutes(router, db)
 	routes.SetupMessageRoutes(router, db)

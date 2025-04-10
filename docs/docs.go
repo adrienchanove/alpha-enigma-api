@@ -24,6 +24,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth/token": {
+            "post": {
+                "description": "Request a token for authentication",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Request a token",
+                "parameters": [
+                    {
+                        "description": "Authentication request",
+                        "name": "authRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/routes.AuthRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/routes.AuthResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/messages": {
             "get": {
                 "description": "Get a list of all messages",
@@ -110,7 +144,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/routes.User"
+                                "$ref": "#/definitions/routes.UserGet"
                             }
                         }
                     }
@@ -178,7 +212,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/routes.User"
+                                "$ref": "#/definitions/routes.UserGet"
                             }
                         }
                     }
@@ -203,7 +237,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/routes.User"
+                            "$ref": "#/definitions/routes.UserPost"
                         }
                     }
                 ],
@@ -211,7 +245,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/routes.User"
+                            "$ref": "#/definitions/routes.UserGet"
                         }
                     }
                 }
@@ -243,7 +277,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/routes.User"
+                            "$ref": "#/definitions/routes.UserGet"
                         }
                     }
                 }
@@ -251,6 +285,22 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "routes.AuthRequest": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "routes.AuthResponse": {
+            "type": "object",
+            "properties": {
+                "encryptedToken": {
+                    "type": "string"
+                }
+            }
+        },
         "routes.Message": {
             "type": "object",
             "properties": {
@@ -268,11 +318,28 @@ const docTemplate = `{
                 }
             }
         },
-        "routes.User": {
+        "routes.UserGet": {
             "type": "object",
             "properties": {
                 "id": {
                     "type": "integer"
+                },
+                "publicKey": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "routes.UserPost": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "publicKey": {
+                    "type": "string"
                 },
                 "username": {
                     "type": "string"

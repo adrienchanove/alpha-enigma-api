@@ -112,7 +112,7 @@ func SetMessage(db *sql.DB) gin.HandlerFunc {
 // @Accept json
 // @Produce json
 // @Param userId path int true "User ID"
-// @Success 200 {array} User
+// @Success 200 {array} UserGet
 // @Router /messages/getDiscussions/{userId} [get]
 func GetDiscussions(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -157,10 +157,10 @@ func GetDiscussions(db *sql.DB) gin.HandlerFunc {
 
 		}
 
-		var users []User
+		var users []UserGet
 
 		for _, userId := range userIds {
-			var u User
+			var u UserGet
 
 			err := db.QueryRow("SELECT id, username FROM users WHERE id = ?", userId).Scan(&u.ID, &u.Username)
 			if err != nil {
@@ -176,7 +176,7 @@ func GetDiscussions(db *sql.DB) gin.HandlerFunc {
 		}
 
 		if len(users) == 0 {
-			c.IndentedJSON(http.StatusOK, []User{})
+			c.IndentedJSON(http.StatusOK, []UserGet{})
 		} else {
 			c.IndentedJSON(http.StatusOK, users)
 		}
