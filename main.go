@@ -11,9 +11,9 @@ import (
 	_ "github.com/adrienchanove/alpha-enigma-api/docs"
 )
 
-// @title           My Test Api
-// @version         1.0
-// @description     My Test Api to compare go and node
+// @title           Enigma chat API
+// @version         0.0.1
+// @description     Api to serv messaging securly
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support

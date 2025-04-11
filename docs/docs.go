@@ -402,12 +402,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
+	Version:          "0.0.1",
 	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "My Test Api",
-	Description:      "My Test Api to compare go and node",
+	Title:            "Enigma chat API",
+	Description:      "Api to serv messaging securly",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

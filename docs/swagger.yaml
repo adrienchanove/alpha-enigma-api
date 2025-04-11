@@ -44,13 +44,13 @@ info:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: My Test Api to compare go and node
+  description: Api to serv messaging securly
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: My Test Api
-  version: "1.0"
+  title: Enigma chat API
+  version: 0.0.1
 paths:
   /auth/token:
     post:
