@@ -151,8 +151,6 @@ func GetDiscussions(db *sql.DB) gin.HandlerFunc {
 		var userIds []int
 
 		// length rows
-		log.Println(rows.Columns())
-
 		for rows.Next() {
 			var u int
 			var u2 int
