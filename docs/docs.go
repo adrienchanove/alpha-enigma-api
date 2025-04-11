@@ -137,7 +137,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/messages/getDiscussions/{userId}": {
+        "/messages/getDiscussions/": {
             "get": {
                 "security": [
                     {
@@ -158,15 +158,6 @@ const docTemplate = `{
                     "messages"
                 ],
                 "summary": "Return a list of user who a user speaks to",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User ID",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -180,7 +171,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/messages/getMessagesBetween/{userId1}/{userId2}": {
+        "/messages/getMessagesWith/{userId}": {
             "get": {
                 "security": [
                     {
@@ -190,7 +181,7 @@ const docTemplate = `{
                         "X-User": []
                     }
                 ],
-                "description": "get messages between two user",
+                "description": "get messages with a user",
                 "consumes": [
                     "application/json"
                 ],
@@ -200,19 +191,12 @@ const docTemplate = `{
                 "tags": [
                     "messages"
                 ],
-                "summary": "get messages between two user",
+                "summary": "get messages with a user",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID 1",
-                        "name": "userId1",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "User ID 2",
-                        "name": "userId2",
+                        "description": "User ID",
+                        "name": "userId",
                         "in": "path",
                         "required": true
                     }

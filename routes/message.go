@@ -2,6 +2,7 @@ package routes
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -115,19 +116,25 @@ func SetMessage(db *sql.DB) gin.HandlerFunc {
 // @Tags messages
 // @Accept json
 // @Produce json
-// @Param userId path int true "User ID"
 // @Success 200 {array} UserGet
 // @Security ApiKeyAuth
 // @Security X-User
-// @Router /messages/getDiscussions/{userId} [get]
+// @Router /messages/getDiscussions/ [get]
 func GetDiscussions(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userIdStr := c.Param("userId")
-		userId, err := strconv.Atoi(userIdStr)
-		if err != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		username := c.GetHeader("X-User")
+		if username == "" {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "X-User header is required"})
 			return
 		}
+		var userId int
+		var err error
+		userId, err = getUserIDByUsername(db, username)
+		if err != nil {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+			return
+		}
+
 		if userId <= 0 {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "userId must be a positive integer"})
 			return
@@ -189,43 +196,41 @@ func GetDiscussions(db *sql.DB) gin.HandlerFunc {
 	}
 }
 
-// getMessageBetween godoc
-// @Summary get messages between two user
-// @Description get messages between two user
+// getMessageWith godoc
+// @Summary get messages with a user
+// @Description get messages with a user
 // @Tags messages
 // @Accept json
 // @Produce json
-// @Param userId1 path int true "User ID 1"
-// @Param userId2 path int true "User ID 2"
+// @Param userId path int true "User ID"
 // @Success 200 {array} Message
 // @Security ApiKeyAuth
 // @Security X-User
-// @Router /messages/getMessagesBetween/{userId1}/{userId2} [get]
-func GetMessagesBetween(db *sql.DB) gin.HandlerFunc {
+// @Router /messages/getMessagesWith/{userId} [get]
+func GetMessagesWith(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userId1Str := c.Param("userId1")
-		userId2Str := c.Param("userId2")
-
-		userId1, err := strconv.Atoi(userId1Str)
+		foreignUserIdStr := c.Param("userId")
+		foreignUserId, err := strconv.Atoi(foreignUserIdStr)
 		if err != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID 1"})
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 			return
 		}
-		userId2, err := strconv.Atoi(userId2Str)
+		if foreignUserId <= 0 {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "userId must be a positive integer"})
+			return
+		}
+		username := c.GetHeader("X-User")
+		if username == "" {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "X-User header is required"})
+			return
+		}
+		userId, err := getUserIDByUsername(db, username)
 		if err != nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID 2"})
-			return
-		}
-		if userId1 <= 0 {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "userId1 must be a positive integer"})
-			return
-		}
-		if userId2 <= 0 {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "userId2 must be a positive integer"})
+			c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "user not found"})
 			return
 		}
 
-		rows, err := db.Query("SELECT id, content, sender_id, receiver_id FROM messages WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)", userId1, userId2, userId2, userId1)
+		rows, err := db.Query("SELECT id, content, sender_id, receiver_id FROM messages WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)", userId, foreignUserId, foreignUserId, userId)
 		if err != nil {
 			log.Println(err)
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to get messages"})
@@ -257,7 +262,22 @@ func SetupMessageRoutes(router *gin.Engine, db *sql.DB) {
 	{
 		messageRoutes.GET("/", GetMessages(db))
 		messageRoutes.POST("/", SetMessage(db))
-		messageRoutes.GET("/getDiscussions/:userId", GetDiscussions(db))
-		messageRoutes.GET("/getMessagesBetween/:userId1/:userId2", GetMessagesBetween(db))
+		messageRoutes.GET("/getDiscussions/", GetDiscussions(db))
+		messageRoutes.GET("/getMessagesWith/:userId", GetMessagesWith(db))
+
 	}
+}
+
+// getUserIDByUsername
+func getUserIDByUsername(db *sql.DB, username string) (int, error) {
+	var userId int
+	err := db.QueryRow("SELECT id FROM users WHERE username = ?", username).Scan(&userId)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return 0, errors.New("user not found")
+		} else {
+			return 0, err
+		}
+	}
+	return userId, nil
 }

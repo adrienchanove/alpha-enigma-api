@@ -122,17 +122,11 @@ paths:
       summary: Create a new message
       tags:
       - messages
-  /messages/getDiscussions/{userId}:
+  /messages/getDiscussions/:
     get:
       consumes:
       - application/json
       description: Return a user list who the user have discussed with
-      parameters:
-      - description: User ID
-        in: path
-        name: userId
-        required: true
-        type: integer
       produces:
       - application/json
       responses:
@@ -148,20 +142,15 @@ paths:
       summary: Return a list of user who a user speaks to
       tags:
       - messages
-  /messages/getMessagesBetween/{userId1}/{userId2}:
+  /messages/getMessagesWith/{userId}:
     get:
       consumes:
       - application/json
-      description: get messages between two user
+      description: get messages with a user
       parameters:
-      - description: User ID 1
+      - description: User ID
         in: path
-        name: userId1
-        required: true
-        type: integer
-      - description: User ID 2
-        in: path
-        name: userId2
+        name: userId
         required: true
         type: integer
       produces:
@@ -176,7 +165,7 @@ paths:
       security:
       - ApiKeyAuth: []
       - X-User: []
-      summary: get messages between two user
+      summary: get messages with a user
       tags:
       - messages
   /users:
