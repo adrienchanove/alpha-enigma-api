@@ -38,7 +38,7 @@ To create the server you'need to have docker or go to compile it yourself.
 
 ### Installation
 
-Whith docker:
+With docker:
 
 ```bash
 docker build --rm -t api:alpha .
