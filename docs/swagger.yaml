@@ -1,0 +1,247 @@
+basePath: /
+definitions:
+  routes.AuthRequest:
+    properties:
+      username:
+        type: string
+    type: object
+  routes.AuthResponse:
+    properties:
+      encryptedToken:
+        type: string
+    type: object
+  routes.Message:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      receiverId:
+        type: integer
+      senderId:
+        type: integer
+    type: object
+  routes.UserGet:
+    properties:
+      id:
+        type: integer
+      publicKey:
+        type: string
+      username:
+        type: string
+    type: object
+  routes.UserPost:
+    properties:
+      id:
+        type: integer
+      publicKey:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Api to serv messaging securly
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Enigma chat API
+  version: 0.0.1
+paths:
+  /auth/token:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Request a token for authentication
+        To use the token you need to decrypt it with private key
+      parameters:
+      - description: Authentication request
+        in: body
+        name: authRequest
+        required: true
+        schema:
+          $ref: '#/definitions/routes.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.AuthResponse'
+      security:
+      - X-User: []
+      summary: Request a token
+      tags:
+      - auth
+  /messages:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all messages
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/routes.Message'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
+      summary: Get all messages
+      tags:
+      - messages
+    post:
+      consumes:
+      - application/json
+      description: Create a new message with the input payload
+      parameters:
+      - description: Create message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/routes.Message'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.Message'
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
+      summary: Create a new message
+      tags:
+      - messages
+  /messages/getDiscussions/:
+    get:
+      consumes:
+      - application/json
+      description: Return a user list who the user have discussed with
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/routes.UserGet'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
+      summary: Return a list of user who a user speaks to
+      tags:
+      - messages
+  /messages/getMessagesWith/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: get messages with a user
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/routes.Message'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
+      summary: get messages with a user
+      tags:
+      - messages
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/routes.UserGet'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the input payload
+      parameters:
+      - description: Create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/routes.UserPost'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/routes.UserGet'
+      summary: Create a new user
+      tags:
+      - users
+  /users/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.UserGet'
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
+      summary: Get a user by ID
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    description: Type "Bearer {token}" to correctly authenticate.
+    in: header
+    name: Authorization
+    type: apiKey
+  X-User:
+    description: Type the username to correctly authenticate.
+    in: header
+    name: X-User
+    type: apiKey
+swagger: "2.0"
