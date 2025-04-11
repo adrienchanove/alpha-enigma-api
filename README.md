@@ -31,8 +31,7 @@ The API purpose is to let people message each other with end-to-end encryption.
 
 ### Prerequisites
 
-To use the API you'll need nothing except Internet access and knoledge about http request and cryptography.
-
+To use the API you'll need nothing except Internet access and knowledge about http request and cryptography.
 To create the server you'need to have docker or go to compile it yourself.
 
 
