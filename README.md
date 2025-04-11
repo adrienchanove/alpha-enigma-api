@@ -10,17 +10,13 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Usage](#usage)
+  - [Authentication](#authentication)
 - [API Endpoints](#api-endpoints)
-- [Authentication](#authentication)
-- [Examples](#examples)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+
+
 
 ## Introduction
 
-[Detailed explanation of the API's purpose, what it does, and why it's useful.]
 The API purpose is to let people message each other with end-to-end encryption.
 
 
@@ -56,7 +52,7 @@ go mod tidy
 go build
 ```
 
-### Auth & account
+### Authentication
 
 *Important to remember*
 Using the API will need to create an account first at endpoint POST /user
