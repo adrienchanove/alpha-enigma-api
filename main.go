@@ -13,7 +13,7 @@ import (
 
 // @title           Enigma chat API
 // @version         0.0.1
-// @description     Api to serv messaging securly
+// @description     API to serve messaging securely
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support
