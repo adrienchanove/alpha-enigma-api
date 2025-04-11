@@ -23,10 +23,17 @@ import (
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-//	@_host      localhost:8080
-//
 // @BasePath  /
-// @_schemes http
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer {token}" to correctly authenticate.
+// @securitydefinitions.apikey X-User
+// @in header
+// @name X-User
+// @description Type the username to correctly authenticate.
+
 func main() {
 	router := gin.Default()
 

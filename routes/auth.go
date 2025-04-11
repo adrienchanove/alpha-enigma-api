@@ -93,11 +93,13 @@ func getUserFromToken(token string) (string, bool) {
 // requestToken godoc
 // @Summary Request a token
 // @Description Request a token for authentication
+// @Description To use the token you need to decrypt it with private key
 // @Tags auth
 // @Accept json
 // @Produce json
 // @Param authRequest body AuthRequest true "Authentication request"
 // @Success 200 {object} AuthResponse
+// @Security X-User
 // @Router /auth/token [post]
 func RequestToken(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -192,10 +194,4 @@ func SetupAuthRoutes(router *gin.Engine, db *sql.DB) {
 	}
 }
 
-
-// Comments for Swagger concerning Auth
-// @securitydefinitions.basicAuth
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
-// @description Type "Bearer {token}" to correctly authenticate.
+// Auth schema definition in main.go

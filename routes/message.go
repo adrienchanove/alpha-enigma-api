@@ -25,6 +25,8 @@ type Message struct {
 // @Accept json
 // @Produce json
 // @Success 200 {array} Message
+// @Security ApiKeyAuth
+// @Security X-User
 // @Router /messages [get]
 func GetMessages(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -64,6 +66,8 @@ func GetMessages(db *sql.DB) gin.HandlerFunc {
 // @Produce json
 // @Param message body Message true "Create message"
 // @Success 200 {object} Message
+// @Security ApiKeyAuth
+// @Security X-User
 // @Router /messages [post]
 func SetMessage(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -113,6 +117,8 @@ func SetMessage(db *sql.DB) gin.HandlerFunc {
 // @Produce json
 // @Param userId path int true "User ID"
 // @Success 200 {array} UserGet
+// @Security ApiKeyAuth
+// @Security X-User
 // @Router /messages/getDiscussions/{userId} [get]
 func GetDiscussions(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -192,6 +198,8 @@ func GetDiscussions(db *sql.DB) gin.HandlerFunc {
 // @Param userId1 path int true "User ID 1"
 // @Param userId2 path int true "User ID 2"
 // @Success 200 {array} Message
+// @Security ApiKeyAuth
+// @Security X-User
 // @Router /messages/getMessagesBetween/{userId1}/{userId2} [get]
 func GetMessagesBetween(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {

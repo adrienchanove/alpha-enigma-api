@@ -28,6 +28,8 @@ type UserPost struct {
 // @Accept json
 // @Produce json
 // @Success 200 {array} UserGet
+// @Security ApiKeyAuth
+// @Security X-User
 // @Router /users [get]
 func GetUsers(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -107,6 +109,8 @@ func SetUser(db *sql.DB) gin.HandlerFunc {
 // @Produce json
 // @Param id path int true "User ID"
 // @Success 200 {object} UserGet
+// @Security ApiKeyAuth
+// @Security X-User
 // @Router /users/{id} [get]
 func GetUserById(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -139,7 +143,7 @@ func SetupUserRoutes(router *gin.Engine, db *sql.DB) {
 	{
 		userRoutes.GET("/", GetUsers(db))
 		userRoutes.GET("/:id", GetUserById(db))
-		
+
 	}
 }
 

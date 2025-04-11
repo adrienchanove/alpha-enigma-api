@@ -56,7 +56,9 @@ paths:
     post:
       consumes:
       - application/json
-      description: Request a token for authentication
+      description: |-
+        Request a token for authentication
+        To use the token you need to decrypt it with private key
       parameters:
       - description: Authentication request
         in: body
@@ -71,6 +73,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/routes.AuthResponse'
+      security:
+      - X-User: []
       summary: Request a token
       tags:
       - auth
@@ -88,6 +92,9 @@ paths:
             items:
               $ref: '#/definitions/routes.Message'
             type: array
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
       summary: Get all messages
       tags:
       - messages
@@ -109,6 +116,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/routes.Message'
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
       summary: Create a new message
       tags:
       - messages
@@ -132,6 +142,9 @@ paths:
             items:
               $ref: '#/definitions/routes.UserGet'
             type: array
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
       summary: Return a list of user who a user speaks to
       tags:
       - messages
@@ -160,6 +173,9 @@ paths:
             items:
               $ref: '#/definitions/routes.Message'
             type: array
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
       summary: get messages between two user
       tags:
       - messages
@@ -177,6 +193,9 @@ paths:
             items:
               $ref: '#/definitions/routes.UserGet'
             type: array
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
       summary: Get all users
       tags:
       - users
@@ -219,7 +238,21 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/routes.UserGet'
+      security:
+      - ApiKeyAuth: []
+      - X-User: []
       summary: Get a user by ID
       tags:
       - users
+securityDefinitions:
+  ApiKeyAuth:
+    description: Type "Bearer {token}" to correctly authenticate.
+    in: header
+    name: Authorization
+    type: apiKey
+  X-User:
+    description: Type the username to correctly authenticate.
+    in: header
+    name: X-User
+    type: apiKey
 swagger: "2.0"

@@ -26,7 +26,12 @@ const docTemplate = `{
     "paths": {
         "/auth/token": {
             "post": {
-                "description": "Request a token for authentication",
+                "security": [
+                    {
+                        "X-User": []
+                    }
+                ],
+                "description": "Request a token for authentication\nTo use the token you need to decrypt it with private key",
                 "consumes": [
                     "application/json"
                 ],
@@ -60,6 +65,14 @@ const docTemplate = `{
         },
         "/messages": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "X-User": []
+                    }
+                ],
                 "description": "Get a list of all messages",
                 "consumes": [
                     "application/json"
@@ -84,6 +97,14 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "X-User": []
+                    }
+                ],
                 "description": "Create a new message with the input payload",
                 "consumes": [
                     "application/json"
@@ -118,6 +139,14 @@ const docTemplate = `{
         },
         "/messages/getDiscussions/{userId}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "X-User": []
+                    }
+                ],
                 "description": "Return a user list who the user have discussed with",
                 "consumes": [
                     "application/json"
@@ -153,6 +182,14 @@ const docTemplate = `{
         },
         "/messages/getMessagesBetween/{userId1}/{userId2}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "X-User": []
+                    }
+                ],
                 "description": "get messages between two user",
                 "consumes": [
                     "application/json"
@@ -195,6 +232,14 @@ const docTemplate = `{
         },
         "/users": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "X-User": []
+                    }
+                ],
                 "description": "Get a list of all users",
                 "consumes": [
                     "application/json"
@@ -253,6 +298,14 @@ const docTemplate = `{
         },
         "/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "X-User": []
+                    }
+                ],
                 "description": "Get a user by ID",
                 "consumes": [
                     "application/json"
@@ -345,6 +398,20 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "description": "Type \"Bearer {token}\" to correctly authenticate.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+        "X-User": {
+            "description": "Type the username to correctly authenticate.",
+            "type": "apiKey",
+            "name": "X-User",
+            "in": "header"
         }
     }
 }`
