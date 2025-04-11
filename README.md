@@ -57,7 +57,7 @@ go build
 *Important to remember*
 Using the API will need to create an account first at endpoint POST /user
 The user need a username and a valid RSA 2048 PEM encoded public key.
-Exemple of public key 
+Example of public key 
 ```
 -----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAO
